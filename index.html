@@ -122,6 +122,8 @@
     padding: 2px 8px; border-radius: 999px; backdrop-filter: blur(4px);
   }
   .panorama figcaption a { color: inherit; }
+  .panorama figcaption { opacity: 0; transition: opacity .2s ease; }
+  .panorama:hover figcaption, .panorama:focus-within figcaption { opacity: 1; }
 
   .intro {
     display: grid;
@@ -792,7 +794,7 @@
 
   $("#credits").innerHTML = HOODS.filter((h) => h.photo.credit).map((h) =>
     `<li>${esc(h.name)}: <a href="${h.photo.page}" target="_blank" rel="noopener">${esc(h.photo.credit)}</a>, ${esc(h.photo.license)}</li>`
-  ).join("") + `<li>Header photo: Suneth Tissera</li>`;
+  ).join("");
 
   render();
 })();
