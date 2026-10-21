@@ -115,7 +115,7 @@
     background: var(--sand);
     box-shadow: var(--shadow);
   }
-  .panorama img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block; }
+  .panorama img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; display: block; }
   .panorama figcaption {
     position: absolute; right: 10px; bottom: 8px;
     font-size: 11px; color: #fff; background: rgba(20, 18, 14, .45);
@@ -375,8 +375,8 @@
   <p class="byline">Put together by <strong>Suneth Tissera</strong> for a family trip with teens.</p>
 
   <figure class="panorama" style="margin-inline:0">
-    <img src="img/winter/hero.jpg" alt="Two people walking across the snow-covered Brooklyn Bridge in a snowstorm" width="1920" height="640">
-    <figcaption>Snow on the Brooklyn Bridge · <a href="https://commons.wikimedia.org/wiki/File:Snowy_Brooklyn_Bridge_(Unsplash).jpg" target="_blank" rel="noopener">Emanuel Hahn, CC0</a></figcaption>
+    <img src="img/hero-suneth.jpg" alt="The Midtown Manhattan skyline at sunset, seen from a rooftop across the river" width="1920" height="960">
+    <figcaption>Photo: Suneth Tissera</figcaption>
   </figure>
 
   <section class="intro" aria-labelledby="intro-h">
@@ -792,7 +792,7 @@
 
   $("#credits").innerHTML = HOODS.filter((h) => h.photo.credit).map((h) =>
     `<li>${esc(h.name)}: <a href="${h.photo.page}" target="_blank" rel="noopener">${esc(h.photo.credit)}</a>, ${esc(h.photo.license)}</li>`
-  ).join("") + `<li>Header panorama: <a href="https://commons.wikimedia.org/wiki/File:Snowy_Brooklyn_Bridge_(Unsplash).jpg" target="_blank" rel="noopener">Emanuel Hahn</a>, CC0</li>`;
+  ).join("") + `<li>Header photo: Suneth Tissera</li>`;
 
   render();
 })();
