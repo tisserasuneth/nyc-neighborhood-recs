@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NYC Family Hotel Guide</title>
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  /* Layout: a pocket guidebook on cream paper. Header + panorama, three quick picks, a sticky filter bar, then photo cards (or a compare table). Subway bullets carry the real MTA line colors. */
+  :root {
+    --cream: #F4ECDA;
+    --paper: #FBF6EA;
+    --sand: #E6DAC0;
+    --sand-deep: #D3C3A2;
+    --ink: #24211B;
+    --muted: #6A604F;
+    --harbor: #1E5262;
+    --harbor-soft: #DCE6E2;
+    --taxi: #F2BE2E;
+    --taxi-deep: #C99A17;
+    --rose: #B93A4B;
+    --rose-soft: #F6E0DD;
+    --shadow: 0 1px 2px rgba(60, 45, 20, .06), 0 8px 24px -12px rgba(60, 45, 20, .22);
+
+    --line-123: #EE352E;
+    --line-456: #00933C;
+    --line-7: #B933AD;
+    --line-ace: #0039A6;
+    --line-bdfm: #FF6319;
+    --line-jz: #996633;
+    --line-l: #A7A9AC;
+    --line-nqrw: #FCCC0A;
+    --line-s: #808183;
+    --on-line: #FFFFFF;
+    --on-yellow: #1A1A1A;
+
+    --font-display: "Bricolage Grotesque", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
+    --font-body: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+    --step--1: .8125rem;
+    --step-0: 1rem;
+    --step-1: 1.1875rem;
+    --step-2: 1.5rem;
+    --step-4: clamp(2.5rem, 7vw, 4.75rem);
+
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 30;
+    background: var(--cream);
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: var(--harbor); text-underline-offset: 2px; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--harbor); outline-offset: 2px; border-radius: 6px; }
+
+  /* Header */
+  header.top { padding-block: 40px 20px; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+  }
+  .eyebrow .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--sand-deep); }
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 800;
+    line-height: .95;
+    letter-spacing: -.02em;
+    margin-top: 14px;
+    font-variation-settings: "opsz" 96;
+  }
+  h1 .hl {
+    background: linear-gradient(transparent 62%, var(--taxi) 62%, var(--taxi) 92%, transparent 92%);
+    padding-inline: .04em;
+  }
+  .byline { margin-top: 14px; color: var(--muted); font-size: var(--step-0); }
+  .byline strong { color: var(--ink); font-weight: 600; }
+
+  .panorama {
+    margin-top: 28px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 3 / 1;
+    max-width: 100%;
+    background: var(--sand);
+    box-shadow: var(--shadow);
+  }
+  .panorama img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; display: block; }
+  .panorama figcaption {
+    position: absolute; right: 10px; bottom: 8px;
+    font-size: 11px; color: #fff; background: rgba(20, 18, 14, .45);
+    padding: 2px 8px; border-radius: 999px; backdrop-filter: blur(4px);
+  }
+  .panorama figcaption a { color: inherit; }
+
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 32px;
+    margin-top: 32px;
+    align-items: start;
+  }
+  .intro h2 { font-size: var(--step-2); font-weight: 700; letter-spacing: -.01em; }
+  .intro p { margin-top: 10px; max-width: 62ch; font-size: var(--step-1); line-height: 1.5; }
+  .intro .note { margin-top: 12px; font-size: var(--step--1); color: var(--muted); }
+
+  .picks { display: grid; gap: 10px; }
+  .picks-label { font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .pick {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    text-align: left;
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 14px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, transform .15s;
+  }
+  .pick:hover { border-color: var(--sand-deep); transform: translateY(-1px); }
+  .pick[aria-pressed="true"] { background: var(--harbor-soft); border-color: var(--harbor); }
+  .pick .glyph {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: grid; place-items: center;
+    background: var(--cream); border: 1px solid var(--sand);
+  }
+  .pick .glyph svg { width: 22px; height: 22px; stroke: var(--harbor); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pick .t { font-weight: 600; line-height: 1.3; }
+  .pick .s { font-size: var(--step--1); color: var(--muted); }
+  .pick .go { font-family: var(--font-mono); font-size: 12px; color: var(--harbor); white-space: nowrap; }
+
+  /* Toolbar */
+  .toolbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    background: color-mix(in srgb, var(--cream) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--sand);
+    margin-top: 36px;
+  }
+  .toolbar .wrap { padding-block: 12px; display: grid; gap: 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  .row.spread { justify-content: space-between; }
+  .seg {
+    display: inline-flex;
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .seg button {
+    border: 0; background: transparent; cursor: pointer;
+    padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--muted);
+  }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    border: 1px solid var(--sand-deep);
+    background: transparent;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 13.5px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: background .15s, border-color .15s;
+  }
+  .chip:hover { background: var(--paper); }
+  .chip[aria-pressed="true"] { background: var(--harbor); border-color: var(--harbor); color: var(--paper); }
+  select {
+    font: inherit; font-size: 14px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--sand-deep); border-radius: 999px;
+    padding: 6px 12px;
+  }
+  .starbtn {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--sand-deep); background: transparent; border-radius: 999px;
+    padding: 5px 12px; font-size: 13.5px; cursor: pointer;
+  }
+  #only-picks[aria-pressed="true"] { background: var(--taxi); border-color: var(--taxi-deep); }
+  #only-saved[aria-pressed="true"] { background: var(--rose-soft); border-color: var(--rose); color: var(--rose); }
+  #only-picks svg { color: var(--taxi-deep); }
+  #only-picks[aria-pressed="true"] svg { color: var(--ink); }
+  .starbtn svg { width: 15px; height: 15px; }
+  .count { font-size: 14px; color: var(--muted); }
+  .count b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .reset { border: 0; background: none; color: var(--harbor); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; font-size: 14px; padding: 0; }
+
+  /* Cards */
+  main { padding-block: 28px 12px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+    min-width: 0;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgba(60,45,20,.06), 0 16px 32px -14px rgba(60,45,20,.3); }
+  .photo {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    max-width: 100%;
+    background: var(--sand);
+    border: 0; padding: 0; margin: 0; display: block; width: 100%;
+    cursor: zoom-in;
+    overflow: hidden;
+  }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+  .card:hover .photo img { transform: scale(1.03); }
+  .boro {
+    position: absolute; left: 12px; top: 12px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    background: var(--paper); color: var(--ink);
+    padding: 4px 9px; border-radius: 999px;
+  }
+  .fav {
+    position: absolute; right: 10px; top: 10px;
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 0; background: var(--paper); cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .fav svg { width: 19px; height: 19px; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
+  .fav[aria-pressed="true"] svg { fill: var(--rose); stroke: var(--rose); }
+  .pick-badge {
+    position: absolute; left: 12px; bottom: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--taxi); color: var(--ink);
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 5px 11px 5px 8px; border-radius: 999px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+  }
+  .pick-badge svg { width: 14px; height: 14px; fill: currentColor; }
+  .card.is-pick { border-color: var(--taxi-deep); box-shadow: 0 0 0 1px var(--taxi-deep), var(--shadow); }
+  .tstar { color: var(--taxi-deep); margin-right: 4px; }
+
+  .body { padding: 18px 20px 20px; display: grid; gap: 14px; flex: 1; align-content: start; }
+  .card h3 { font-size: var(--step-2); font-weight: 700; letter-spacing: -.01em; line-height: 1.1; }
+
+  .facts { display: grid; gap: 12px; margin: 0; }
+  .fact dt {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .fact dd { margin: 0; }
+
+  .lines { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+  .group { display: inline-flex; gap: 3px; }
+  .bullet {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: inline-grid; place-items: center;
+    font-family: var(--font-body); font-weight: 700; font-size: 13.5px; line-height: 1;
+    color: var(--on-line);
+  }
+  .bullet.y { color: var(--on-yellow); }
+  .bullet.diamond { border-radius: 4px; transform: rotate(45deg) scale(.82); }
+  .bullet.diamond span { transform: rotate(-45deg); }
+  .extra {
+    font-size: 12.5px; padding: 2px 9px; border-radius: 999px;
+    background: var(--harbor-soft); color: var(--harbor); font-weight: 500;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .extra svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-size: 12px; color: var(--muted); border: 1px dashed var(--sand-deep); border-radius: 999px; padding: 1px 8px; }
+
+  .empty {
+    text-align: center; padding: 56px 16px; color: var(--muted);
+    border: 1px dashed var(--sand-deep); border-radius: 18px;
+  }
+  .empty p + p { margin-top: 8px; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; background: var(--paper); border: 1px solid var(--sand); border-radius: 18px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 980px; font-size: 14.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 14px 14px; border-bottom: 1px solid var(--sand); }
+  thead th {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500;
+    background: var(--cream); position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: color-mix(in srgb, var(--harbor-soft) 45%, transparent); }
+  td.name { font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 1.2; min-width: 170px; }
+  td.name .mini { display: flex; gap: 10px; align-items: center; }
+  td.name img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; flex: none; }
+  td .lines { min-width: 150px; }
+  td .bullet { width: 21px; height: 21px; font-size: 12px; }
+
+  /* Footer */
+  footer { padding-block: 24px 56px; color: var(--muted); font-size: var(--step--1); }
+  footer .fine { border-top: 1px solid var(--sand-deep); padding-top: 18px; display: grid; gap: 8px; max-width: 80ch; }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; color: var(--ink); font-weight: 500; }
+  .credits { margin: 10px 0 0; padding-left: 18px; columns: 2 320px; column-gap: 32px; }
+  .credits li { break-inside: avoid; margin-bottom: 4px; }
+
+  /* Lightbox */
+  dialog {
+    border: 0; padding: 0; background: transparent; max-width: min(1100px, 94vw); width: 100%;
+  }
+  dialog::backdrop { background: rgba(28, 24, 18, .78); }
+  .lb { background: var(--paper); border-radius: 16px; overflow: hidden; }
+  .lb img { width: 100%; max-height: 74vh; object-fit: contain; background: #16130F; display: block; }
+  .lb-cap { padding: 12px 16px; display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; font-size: 14px; }
+  .lb-cap b { font-family: var(--font-display); font-size: 18px; }
+  .lb-cap small { color: var(--muted); }
+  .lb-close {
+    border: 1px solid var(--sand-deep); background: var(--cream); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 14px;
+  }
+
+  @media (max-width: 820px) {
+    .intro { grid-template-columns: 1fr; gap: 24px; }
+    .panorama { aspect-ratio: 2 / 1; }
+  }
+  @media (max-width: 520px) {
+    header.top { padding-block: 24px 12px; }
+    .grid { grid-template-columns: 1fr; }
+    .pick .go { display: none; }
+    .toolbar { position: static; backdrop-filter: none; background: var(--cream); }
+    .toolbar .wrap { gap: 8px; }
+    .panorama figcaption { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <div class="eyebrow"><span>Oct 20, 2026</span><span class="dot"></span><span>Manhattan + Brooklyn</span><span class="dot"></span><span>Family of four</span></div>
+  <h1>NYC Family <span class="hl">Hotel</span> Guide</h1>
+  <p class="byline">Put together by <strong>Suneth Tissera</strong> for a family trip with teens.</p>
+
+  <figure class="panorama" style="margin-inline:0">
+    <img src="img/hero.jpg" alt="The Brooklyn Bridge and the Lower Manhattan skyline seen from Pebble Beach in DUMBO" width="1600" height="533">
+    <figcaption>Brooklyn Bridge from Pebble Beach, DUMBO · <a href="https://commons.wikimedia.org/wiki/File:Brooklyn_Bridge_and_the_Lower_Manhattan_skyline_from_Pebble_Beach,_New_York.jpg" target="_blank" rel="noopener">Christian David, CC BY-SA 4.0</a></figcaption>
+  </figure>
+
+  <section class="intro" aria-labelledby="intro-h">
+    <div>
+      <h2 id="intro-h">Neighborhoods: Manhattan and Brooklyn</h2>
+      <p>Skipping Times Square, the best bases for teens are SoHo or the West Village for shopping and street life, DUMBO or Williamsburg in Brooklyn for skyline views and a local feel, and Midtown East or Flatiron if you want to stay central without the crowds.</p>
+      <p class="note">Every area below is 1–3 subway stops or a 15–25 minute ride from the main sights.</p>
+    </div>
+    <div class="picks" role="group" aria-label="Quick picks">
+      <span class="picks-label">By interest · tap to filter</span>
+      <button class="pick" type="button" id="pick-shop" data-pick="shop" aria-pressed="false">
+        <span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
+        <span><span class="t">Shopping and street life</span><br><span class="s">SoHo or the West Village</span></span>
+        <span class="go">Show 2</span>
+      </button>
+      <button class="pick" type="button" id="pick-views" data-pick="views" aria-pressed="false">
+        <span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18"/><path d="M5 20V10h3v10"/><path d="M10 20V5h4v15"/><path d="M16 20v-8h3v8"/></svg></span>
+        <span><span class="t">Skyline views, local feel</span><br><span class="s">DUMBO or Williamsburg, Brooklyn</span></span>
+        <span class="go">Show 2</span>
+      </button>
+      <button class="pick" type="button" id="pick-central" data-pick="central" aria-pressed="false">
+        <span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
+        <span><span class="t">Central, without the crowds</span><br><span class="s">Midtown East or Flatiron</span></span>
+        <span class="go">Show 2</span>
+      </button>
+    </div>
+  </section>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="row spread">
+      <div class="row">
+        <div class="seg" role="group" aria-label="Borough">
+          <button type="button" id="boro-all" data-boro="all" aria-pressed="true">All</button>
+          <button type="button" id="boro-man" data-boro="Manhattan" aria-pressed="false">Manhattan</button>
+          <button type="button" id="boro-bk" data-boro="Brooklyn" aria-pressed="false">Brooklyn</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="count" for="sort">Sort</label>
+        <select id="sort">
+          <option value="picks">Suneth’s picks first</option>
+          <option value="guide">Guide order</option>
+          <option value="name">A to Z</option>
+        </select>
+        <div class="seg" role="group" aria-label="View">
+          <button type="button" id="view-cards" data-view="cards" aria-pressed="true">Cards</button>
+          <button type="button" id="view-table" data-view="table" aria-pressed="false">Compare</button>
+        </div>
+      </div>
+    </div>
+    <div class="row spread">
+      <div class="chips" id="tag-chips" role="group" aria-label="What the teens want"></div>
+      <div class="row">
+        <button type="button" class="starbtn" id="only-picks" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z" fill="currentColor"/></svg>
+          Suneth’s picks <b id="picks-count">7</b>
+        </button>
+        <button type="button" class="starbtn" id="only-saved" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z" fill="currentColor"/></svg>
+          Saved <b id="saved-count">0</b>
+        </button>
+        <span class="count" aria-live="polite"><b id="shown">15</b> of <span id="total">15</span> shown</span>
+        <button type="button" class="reset" id="reset">Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="cards" class="grid"></div>
+  <div id="table" class="table-wrap" hidden>
+    <table>
+      <thead>
+        <tr><th>Neighborhood</th><th>Borough</th><th>Why teens like it</th><th>Getting around</th></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div id="empty" class="empty" hidden>
+    <p><strong>No neighborhoods match these filters.</strong></p>
+    <p>Clear a filter to see more. <button type="button" class="reset" id="reset-empty">Reset filters</button></p>
+  </div>
+</main>
+
+<footer class="wrap">
+  <div class="fine">
+    <p>Source for neighborhood notes: Santorini Dave, <em>Best Family Hotels in NYC</em> (Sept 2026). East Village, Hudson Yards / Hell’s Kitchen and Upper East Side were added afterward and are not from that source.</p>
+    <details>
+      <summary>Photo credits (Wikimedia Commons)</summary>
+      <ul class="credits" id="credits"></ul>
+    </details>
+  </div>
+</footer>
+
+<dialog id="lightbox" aria-label="Photo">
+  <div class="lb">
+    <img id="lb-img" src="" alt="">
+    <div class="lb-cap">
+      <div><b id="lb-title"></b><br><small id="lb-credit"></small></div>
+      <button type="button" class="lb-close" id="lb-close">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const LINE_COLORS = {
+    "1": "--line-123", "2": "--line-123", "3": "--line-123",
+    "4": "--line-456", "5": "--line-456", "6": "--line-456",
+    "7": "--line-7",
+    "A": "--line-ace", "C": "--line-ace", "E": "--line-ace",
+    "B": "--line-bdfm", "D": "--line-bdfm", "F": "--line-bdfm", "M": "--line-bdfm",
+    "J": "--line-jz", "Z": "--line-jz",
+    "L": "--line-l",
+    "N": "--line-nqrw", "Q": "--line-nqrw", "R": "--line-nqrw", "W": "--line-nqrw",
+    "S": "--line-s"
+  };
+
+  const TAGS = [
+    { id: "shopping", label: "Shopping" },
+    { id: "food", label: "Food" },
+    { id: "parks", label: "Parks" },
+    { id: "views", label: "Views + waterfront" },
+    { id: "sights", label: "Landmarks + museums" },
+    { id: "quiet", label: "Quieter nights" },
+    { id: "central", label: "Central" }
+  ];
+
+  const PICKS = {
+    shop: ["soho", "west-village"],
+    views: ["dumbo", "williamsburg"],
+    central: ["midtown-east", "flatiron"]
+  };
+
+  const HOODS = [
+    {
+      id: "soho", name: "SoHo", boro: "Manhattan",
+      why: "Flagship stores on Broadway and Prince St, cast-iron streets, cafes, street style",
+      lines: [["N", "R", "W"], ["6"], ["C", "E"], ["B", "D", "F", "M"]], extras: [],
+      tags: ["shopping", "food"],
+      photo: { src: "img/soho.jpg", alt: "Cast-iron building facades in SoHo", credit: "Jim.henderson", license: "CC0", page: "https://commons.wikimedia.org/wiki/File:Cast_Iron_Grand_Crosby_jeh_crop.jpg" }
+    },
+    {
+      id: "tribeca", name: "Tribeca", boro: "Manhattan",
+      why: "Calm, upscale, Hudson River Park piers; walk to the 9/11 Memorial and Brooklyn Bridge",
+      lines: [["1"], ["A", "C", "E"]], extras: [],
+      tags: ["quiet", "views", "sights", "parks"],
+      photo: { src: "img/tribeca.jpg", alt: "A Tribeca street with brick warehouse buildings", credit: "ajay_suresh", license: "CC BY 2.0", page: "https://commons.wikimedia.org/wiki/File:Tribeca,_New_York_(51521771723).jpg" }
+    },
+    {
+      id: "west-village", name: "West Village / Greenwich Village", boro: "Manhattan",
+      why: "Washington Square Park, tree-lined streets, classic pizza and dessert spots, NYU energy",
+      lines: [["A", "C", "E"], ["B", "D", "F", "M"], ["1"]], extras: [],
+      tags: ["parks", "food", "shopping"],
+      photo: { src: "img/west-village.jpg", alt: "The Washington Square Arch in Greenwich Village", credit: "Isabella Ruffalo-Burgat", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Washington_Square_Arch-Isabella.jpg" }
+    },
+    {
+      id: "east-village", name: "East Village", boro: "Manhattan",
+      why: "St. Marks Place, Tompkins Square Park, cheap eats (ramen, dumplings, hot dogs), vintage and record shops; walk to the West Village and Lower East Side",
+      lines: [["L"], ["6"], ["F"]], extras: [],
+      tags: ["food", "shopping", "parks"],
+      photo: { src: "img/east-village.jpg", alt: "Papaya King hot dog stand on St. Marks Place", credit: "MusikAnimal", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Papaya_King_on_St._Marks_Place,_East_Village,_New_York_City.JPG" }
+    },
+    {
+      id: "les", name: "Lower East Side / Nolita", boro: "Manhattan",
+      why: "Food (Katz's, dumplings, bagels), vintage shops, young crowd; next to SoHo and Chinatown",
+      lines: [["F"], ["J", "M", "Z"], ["B", "D"]], extras: [],
+      tags: ["food", "shopping"],
+      photo: { src: "img/les.jpg", alt: "Katz's Delicatessen on the Lower East Side", credit: "TaurusEmerald", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Katz%27s_Delicatessen_in_2019.jpg" }
+    },
+    {
+      id: "chelsea", name: "Chelsea / Meatpacking", boro: "Manhattan",
+      why: "High Line, Chelsea Market, Little Island, Whitney Museum",
+      lines: [["1"], ["A", "C", "E"], ["L"]], extras: [],
+      tags: ["parks", "food", "sights", "views"],
+      photo: { src: "img/chelsea-little-island.jpg", alt: "Little Island park on its tulip-shaped piers in the Hudson River, off Chelsea", credit: "Mike Peel", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:At_New_York_City_2023_060_-_Little_Island_at_Pier_55.jpg" }
+    },
+    {
+      id: "hudson-yards", name: "Hudson Yards / Hell’s Kitchen", boro: "Manhattan",
+      why: "Edge observation deck, the Vessel, the north end of the High Line, Hudson Yards mall, Hell’s Kitchen restaurants along 9th Avenue",
+      lines: [["7"], ["A", "C", "E"]], extras: [],
+      tags: ["views", "shopping", "food", "central"],
+      photo: { src: "img/hudson-yards.jpg", alt: "The Vessel in the Hudson Yards public plaza", credit: "Epicgenius", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Hudson_Yards_Plaza_March_2019_18.jpg" }
+    },
+    {
+      id: "flatiron", name: "Flatiron / NoMad / Union Square", boro: "Manhattan",
+      why: "Madison Square Park, Eataly, Union Square market; central for uptown and downtown",
+      lines: [["N", "R", "W"], ["4", "5", "6"], ["F", "M"], ["L"]], extras: [],
+      tags: ["central", "food", "parks"],
+      photo: { src: "img/flatiron.jpg", alt: "The Flatiron Building at Fifth Avenue and Broadway", credit: "Christian David", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Flatiron_Building,_Fifth_Avenue,_Manhattan,_New_York.jpg", pos: "50% 22%" }
+    },
+    {
+      id: "midtown-east", name: "Midtown East / Murray Hill", boro: "Manhattan",
+      why: "Grand Central, Empire State Building, Koreatown food; Midtown without the Times Square crush",
+      lines: [["4", "5", "6"], ["7"], ["S"], ["B", "D", "F", "M"]], extras: [],
+      tags: ["central", "sights", "food", "quiet"],
+      photo: { src: "img/midtown-east.jpg", alt: "The Main Concourse of Grand Central Terminal", credit: "Axel Tschentscher", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Grand_Central_Terminal_Main_Concourse_2019-10-03_20-02.jpg" }
+    },
+    {
+      id: "uws", name: "Upper West Side", boro: "Manhattan",
+      why: "Central Park, Natural History Museum, neighborhood feel",
+      lines: [["1", "2", "3"], ["B", "C"]], extras: [],
+      tags: ["parks", "sights", "quiet"],
+      photo: { src: "img/uws.jpg", alt: "School buses and a taxi outside the American Museum of Natural History", credit: "Chris06", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:2015_American_Museum_of_Natural_History_(1).jpg" }
+    },
+    {
+      id: "ues", name: "Upper East Side", boro: "Manhattan",
+      why: "The Met, the Guggenheim and the rest of Museum Mile, Central Park’s east side, classic brownstone blocks",
+      lines: [["4", "5", "6"], ["Q"]], extras: [],
+      tags: ["sights", "parks", "quiet"],
+      photo: { src: "img/ues.jpg", alt: "The Fifth Avenue entrance of the Metropolitan Museum of Art", credit: "Arad", license: "CC BY-SA 3.0", page: "https://commons.wikimedia.org/wiki/File:Metropolitan_Museum_of_Art_entrance_NYC.JPG" }
+    },
+    {
+      id: "fidi", name: "Financial District", boro: "Manhattan",
+      why: "9/11 Memorial, Statue of Liberty ferries, Brooklyn Bridge walk",
+      lines: [["2", "3"], ["4", "5"], ["A", "C"], ["R", "W"], ["J", "Z"]], extras: ["Ferries"],
+      tags: ["sights", "views", "quiet"],
+      photo: { src: "img/fidi.jpg", alt: "The Lower Manhattan skyline seen across the Hudson River", credit: "Fred Hsu", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:NYC_Downtown_Manhattan_Skyline_seen_from_Paulus_Hook_2019-12-20_IMG_7347_FRD.jpg" }
+    },
+    {
+      id: "dumbo", name: "DUMBO", boro: "Brooklyn",
+      why: "Brooklyn Bridge Park, the famous Manhattan Bridge photo spot, skyline views, Jane's Carousel",
+      lines: [["F"], ["A", "C"]], extras: ["East River Ferry", "1 stop to Manhattan"],
+      tags: ["views", "parks"],
+      photo: { src: "img/dumbo.jpg", alt: "Jane's Carousel in Brooklyn Bridge Park, DUMBO", credit: "MusikAnimal", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Jane%27s_Carousel,_Dumbo_Brooklyn_in_July_2017.jpg" }
+    },
+    {
+      id: "bk-heights", name: "Brooklyn Heights / Downtown Brooklyn", boro: "Brooklyn",
+      why: "Brooklyn Heights Promenade, brownstone streets, walk to DUMBO",
+      lines: [["2", "3"], ["4", "5"], ["A", "C"], ["F"], ["R"]], extras: [],
+      tags: ["views", "quiet"],
+      photo: { src: "img/bk-heights.jpg", alt: "The Brooklyn Heights Promenade looking toward Lower Manhattan", credit: "Acroterion", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:Brooklyn_Heights_Promenade_NY1.jpg" }
+    },
+    {
+      id: "williamsburg", name: "Williamsburg", boro: "Brooklyn",
+      why: "Vintage and indie shops, Domino Park, waterfront, food markets, the “cool Brooklyn” teens see online",
+      lines: [["L"], ["J", "M", "Z"]], extras: ["L is 1 stop to Manhattan", "Ferry"],
+      tags: ["shopping", "food", "views", "parks"],
+      photo: { src: "img/williamsburg.jpg", alt: "The Williamsburg Bridge lit up at dusk over the waterfront lawn", credit: "Justicex07", license: "CC BY-SA 4.0", page: "https://commons.wikimedia.org/wiki/File:WilliamsburgBK.jpg" }
+    }
+  ];
+
+  const FAVORITES = ["soho", "west-village", "chelsea", "uws", "ues", "dumbo", "williamsburg"];
+  const isPick = (h) => FAVORITES.includes(h.id);
+  const STORE_KEY = "nyc-family-hotel-guide:shortlist";
+
+  const state = {
+    boro: "all",
+    tags: new Set(),
+    sort: "picks",
+    view: "cards",
+    pick: undefined,
+    onlySaved: false,
+    onlyPicks: false,
+    saved: loadSaved()
+  };
+
+  function loadSaved() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch (e) {
+      return new Set();
+    }
+  }
+  function saveSaved() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify([...state.saved])); } catch (e) { /* storage unavailable */ }
+  }
+
+  const $ = (sel) => document.querySelector(sel);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const ICON_FERRY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/><path d="M5 14l1-5h12l1 5"/><path d="M9 9V6h6v3"/></svg>';
+  const ICON_STOP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
+  const ICON_HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/></svg>';
+  const ICON_STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/></svg>';
+
+  function bullet(line) {
+    const token = LINE_COLORS[line] || "--line-s";
+    const yellow = token === "--line-nqrw";
+    return `<span class="bullet${yellow ? " y" : ""}" style="background:var(${token})" title="${esc(line)} train">${esc(line)}</span>`;
+  }
+  function linesHtml(h) {
+    const groups = h.lines.map((g) => `<span class="group">${g.map(bullet).join("")}</span>`).join("");
+    const extras = h.extras.map((x) => `<span class="extra">${/ferr/i.test(x) ? ICON_FERRY : ICON_STOP}${esc(x)}</span>`).join("");
+    const label = "Subway: " + h.lines.map((g) => g.join("/")).join(", ") + (h.extras.length ? "; " + h.extras.join(", ") : "");
+    return `<div class="lines" aria-label="${esc(label)}">${groups}${extras}</div>`;
+  }
+  function tagsHtml(h) {
+    return `<div class="tags">${h.tags.map((t) => `<span class="tag">${esc(TAGS.find((x) => x.id === t).label)}</span>`).join("")}</div>`;
+  }
+  function cardHtml(h) {
+    const saved = state.saved.has(h.id);
+    return `<article class="card${isPick(h) ? " is-pick" : ""}" data-id="${h.id}">
+      <div style="position:relative">
+        <button class="photo" type="button" data-zoom="${h.id}" aria-label="Enlarge photo of ${esc(h.name)}">
+          <img src="${h.photo.src}" alt="${esc(h.photo.alt)}" loading="lazy" width="1200" height="800"${h.photo.pos ? ` style="object-position:${h.photo.pos}"` : ""}>
+        </button>
+        <span class="boro">${h.boro}</span>
+        ${isPick(h) ? `<span class="pick-badge">${ICON_STAR}Suneth’s pick</span>` : ""}
+        <button class="fav" type="button" data-fav="${h.id}" aria-pressed="${saved}" aria-label="${saved ? "Remove" : "Add"} ${esc(h.name)} ${saved ? "from" : "to"} saved list">${ICON_HEART}</button>
+      </div>
+      <div class="body">
+        <h3>${esc(h.name)}</h3>
+        <dl class="facts">
+          <div class="fact"><dt>Why teens like it</dt><dd>${esc(h.why)}</dd></div>
+          <div class="fact"><dt>Getting around</dt><dd>${linesHtml(h)}</dd></div>
+        </dl>
+        ${tagsHtml(h)}
+      </div>
+    </article>`;
+  }
+  function rowHtml(h) {
+    return `<tr>
+      <td class="name"><div class="mini"><img src="${h.photo.src}" alt="" loading="lazy"><span>${isPick(h) ? `<span class="tstar" title="Suneth’s pick">★</span>` : ""}${esc(h.name)}</span></div></td>
+      <td>${h.boro}</td>
+      <td>${esc(h.why)}</td>
+      <td>${linesHtml(h)}</td>
+    </tr>`;
+  }
+
+  function matches(h) {
+    if (state.pick && !PICKS[state.pick].includes(h.id)) return false;
+    if (state.boro !== "all" && h.boro !== state.boro) return false;
+    if (state.onlySaved && !state.saved.has(h.id)) return false;
+    if (state.onlyPicks && !isPick(h)) return false;
+    for (const t of state.tags) if (!h.tags.includes(t)) return false;
+    return true;
+  }
+  function sorted(list) {
+    const copy = [...list];
+    if (state.sort === "picks") copy.sort((a, b) => Number(isPick(b)) - Number(isPick(a)));
+    if (state.sort === "name") copy.sort((a, b) => a.name.localeCompare(b.name));
+    return copy;
+  }
+
+  function render() {
+    const list = sorted(HOODS.filter(matches));
+    $("#cards").innerHTML = list.map(cardHtml).join("");
+    $("#tbody").innerHTML = list.map(rowHtml).join("");
+    $("#shown").textContent = list.length;
+    $("#saved-count").textContent = state.saved.size;
+    $("#empty").hidden = list.length > 0;
+    $("#cards").hidden = state.view !== "cards" || list.length === 0;
+    $("#table").hidden = state.view !== "table" || list.length === 0;
+
+    document.querySelectorAll("[data-boro]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.boro === state.boro)));
+    document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === state.view)));
+    document.querySelectorAll("[data-pick]").forEach((b) => {
+      const on = b.dataset.pick === state.pick;
+      b.setAttribute("aria-pressed", String(on));
+      b.querySelector(".go").textContent = on ? "Showing" : "Show 2";
+    });
+    document.querySelectorAll("[data-tag]").forEach((b) => b.setAttribute("aria-pressed", String(state.tags.has(b.dataset.tag))));
+    $("#only-saved").setAttribute("aria-pressed", String(state.onlySaved));
+    $("#only-picks").setAttribute("aria-pressed", String(state.onlyPicks));
+  }
+
+  $("#total").textContent = HOODS.length;
+  $("#picks-count").textContent = FAVORITES.length;
+  $("#tag-chips").innerHTML = TAGS.map((t) => `<button type="button" class="chip" id="tag-${t.id}" data-tag="${t.id}" aria-pressed="false">${esc(t.label)}</button>`).join("");
+
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("button");
+    if (!el) return;
+    if (el.dataset.boro) { state.boro = el.dataset.boro; render(); return; }
+    if (el.dataset.view) { state.view = el.dataset.view; render(); return; }
+    if (el.dataset.tag) {
+      state.tags.has(el.dataset.tag) ? state.tags.delete(el.dataset.tag) : state.tags.add(el.dataset.tag);
+      render(); return;
+    }
+    if (el.dataset.pick) {
+      state.pick = state.pick === el.dataset.pick ? undefined : el.dataset.pick;
+      render();
+      if (state.pick) $(".toolbar").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      return;
+    }
+    if (el.dataset.fav) {
+      const id = el.dataset.fav;
+      state.saved.has(id) ? state.saved.delete(id) : state.saved.add(id);
+      saveSaved(); render(); return;
+    }
+    if (el.dataset.zoom) { openLightbox(el.dataset.zoom); return; }
+    if (el.id === "only-saved") { state.onlySaved = !state.onlySaved; render(); return; }
+    if (el.id === "only-picks") { state.onlyPicks = !state.onlyPicks; render(); return; }
+    if (el.id === "reset" || el.id === "reset-empty") { resetFilters(); return; }
+  });
+
+  function resetFilters() {
+    Object.assign(state, { boro: "all", sort: "picks", pick: undefined, onlySaved: false, onlyPicks: false });
+    state.tags.clear();
+    $("#sort").value = "picks";
+    render();
+  }
+
+  $("#sort").addEventListener("change", (e) => { state.sort = e.target.value; render(); });
+
+  const dlg = $("#lightbox");
+  function openLightbox(id) {
+    const h = HOODS.find((x) => x.id === id);
+    $("#lb-img").src = h.photo.src;
+    $("#lb-img").alt = h.photo.alt;
+    $("#lb-title").textContent = h.name;
+    $("#lb-credit").innerHTML = h.photo.credit
+      ? `${esc(h.photo.alt)} · Photo: <a href="${h.photo.page}" target="_blank" rel="noopener">${esc(h.photo.credit)}, ${esc(h.photo.license)}</a>`
+      : esc(h.photo.alt);
+    if (typeof dlg.showModal === "function") dlg.showModal();
+  }
+  $("#lb-close").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+
+  $("#credits").innerHTML = HOODS.filter((h) => h.photo.credit).map((h) =>
+    `<li>${esc(h.name)}: <a href="${h.photo.page}" target="_blank" rel="noopener">${esc(h.photo.credit)}</a>, ${esc(h.photo.license)}</li>`
+  ).join("") + `<li>Header panorama: <a href="https://commons.wikimedia.org/wiki/File:Brooklyn_Bridge_and_the_Lower_Manhattan_skyline_from_Pebble_Beach,_New_York.jpg" target="_blank" rel="noopener">Christian David</a>, CC BY-SA 4.0</li>`;
+
+  render();
+})();
+</script>
+
+</body>
+</html>
